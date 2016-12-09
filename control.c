@@ -32,6 +32,11 @@ int main( int argc, char * argv[] ){
       umask( 0000 );
       semid = semget( key, 1, IPC_CREAT | IPC_EXCL | 0664 );
       printf("Semaphore Created [%d]\n", semid);
+
+      if( semid == -1 ){
+        printf("Error Detected. Semaphore already exists\n");
+        exit(0);
+      }
       
       shmid = shmget( key, sizeof( int ), IPC_CREAT | IPC_EXCL | 0664 );
       printf("Shared Mem Created [%d]\n", shmid);
