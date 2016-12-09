@@ -9,15 +9,16 @@
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <fcntl.h>
+#include <errno.h>
 
 int main( int argc, char * argv[]){
   int val;
   int semid, shmid, fd;
   int key = ftok( "file", 22 );
   struct sembuf sb;
-  printf("Flag 1 \n");
+  //printf("Flag 1 \n");
   semid = semget( key, 1, 0);
-  printf(" Semaphore ID: [%d]\n", semid );
+  //printf(" Semaphore ID: [%d]\n", semid );
   sb.sem_op = -1;
   sb.sem_num = 1;
   sb.sem_flg = SEM_UNDO;
@@ -26,28 +27,34 @@ int main( int argc, char * argv[]){
   printf(" INSIDE SEMAPHORE! [%d]\n", semid);
 
   shmid = shmget( key, sizeof(int), 0 );
-  printf(" INSIDE SHM! [%d]\n", shmid);
+  //printf(" INSIDE SHM! [%d]\n", shmid);
   int * address = shmat( shmid, 0, 0 );
   
-  fd = open( "file", O_RDWR );
+  fd = open( "file", O_RDWR, 0666 );
 
+  //printf("Length of prev times -1: [%d]\n", -1 * (*address) );//this give me -6.
   lseek( fd, -1 * ( *address ), SEEK_END );
-  char string[100000];
-  read( fd, string, sizeof( string ) );
+  char string[10000];
+  val = read( fd, &string, *address - 1 );
   printf("Last Line: [%s]\n", string );
   
   char string2[10000];
   printf("Type Next Line:");
   fgets(string2, sizeof(string2), stdin);
 
+  //printf("String2: [%s]\n", string2);
+  
   lseek( fd, 0, SEEK_END);
-  write( fd, string2, sizeof(string2));
+  val = write( fd, string2, strlen(string2));
+  if( val < 0 ){
+    printf("Errno[%s]\n", strerror(errno));
+  }
   close( fd );
   
   *address = strlen(string2);
 
   val = shmdt( address );
-  printf("Detach Success[%d]\n", val);
+  //printf("Detach Success[%d]\n", val);
 
   sb.sem_op = 1;
   semop( semid, &sb, 1);
