@@ -33,7 +33,7 @@ int main( int argc, char * argv[] ){
       semid = semget( key, 1, IPC_CREAT | IPC_EXCL | 0664 );
       printf("Semaphore Created [%d]\n", semid);
       
-      shmid = shmget( key, sizeof( int), IPC_CREAT | IPC_EXCL | 0664 );
+      shmid = shmget( key, sizeof( int ), IPC_CREAT | IPC_EXCL | 0664 );
       printf("Shared Mem Created [%d]\n", shmid);
 
       /*
@@ -64,6 +64,15 @@ int main( int argc, char * argv[] ){
       val = shmctl( shmid, IPC_RMID, 0 );
       printf(" Removin Shared Mem: [%d]\n", val);
 
+      fd = open("file", O_RDONLY, 0664 );
+      char string[100000];
+      val = read( fd, string, sizeof( string ) );
+      printf(" Reading File : [%d]\n", val);
+      printf(" File Output:\n %s\n", string );
+      
+      
+    }else if( strcmp( argv[1], "-v" ) == 0){
+      
       fd = open("file", O_RDONLY, 0664 );
       char string[100000];
       val = read( fd, string, sizeof( string ) );
