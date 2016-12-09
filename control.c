@@ -11,19 +11,11 @@
 #include <unistd.h>
 
 
-union semun{
-  int val;
-  struct semid_ds * buf;
-  unsigned int array;
-  struct seminfo *__buf;
-};
-
 int main( int argc, char * argv[] ){
   if ( argc < 2 ){
     printf(" Failed to include enough args \n" );
     return 0;
   }else{
-    union semun su;
     int semid, shmid, fd;
     int val;
     int key = ftok( "file", 22 );
