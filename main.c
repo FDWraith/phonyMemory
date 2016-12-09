@@ -15,11 +15,13 @@ int main( int argc, char * argv[]){
   int semid, shmid, fd;
   int key = ftok( "file", 22 );
   struct sembuf sb;
+  printf("Flag 1 \n");
   semid = semget( key, 1, 0);
+  printf(" Semaphore ID: [%d]\n", semid );
   sb.sem_op = -1;
-  sb.sem_num = 0;
+  sb.sem_num = 1;
   sb.sem_flg = SEM_UNDO;
-
+  
   semop( semid, &sb, 1);
   printf(" INSIDE SEMAPHORE! [%d]\n", semid);
 

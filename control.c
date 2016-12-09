@@ -48,7 +48,7 @@ int main( int argc, char * argv[] ){
       int * address;
       address = shmat( shmid, 0, 0 );
       printf(" Pointer : [%p]\n", address );
-      *address = 0;
+      *address = 1;
       val = shmdt( address );
 
       printf("Change of Shared Mem : [%d]\n", val);
