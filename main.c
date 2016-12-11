@@ -24,7 +24,7 @@ int main( int argc, char * argv[]){
   sb.sem_flg = SEM_UNDO;
   
   semop( semid, &sb, 1);
-  printf(" INSIDE SEMAPHORE! [%d]\n", semid);
+  printf("INSIDE SEMAPHORE! [%d]\n", semid);
 
   shmid = shmget( key, sizeof(int), 0 );
   //printf(" INSIDE SHM! [%d]\n", shmid);
@@ -34,7 +34,7 @@ int main( int argc, char * argv[]){
 
   //printf("Length of prev times -1: [%d]\n", -1 * (*address) );//this give me -6.
   lseek( fd, -1 * ( *address ), SEEK_END );
-  char string[10000];
+  char string[200];
   val = read( fd, &string, *address - 1 );
   printf("Last Line: [%s]\n", string );
   

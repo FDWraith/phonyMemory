@@ -20,7 +20,7 @@ int main( int argc, char * argv[] ){
     int val;
     int key = ftok( "file", 22 );
     
-    if( strcmp( argv[1], "-c" ) == 0 ){
+    if( strncmp( argv[1], "-c", strlen(argv[1])) == 0){
       umask( 0000 );
       semid = semget( key, 1, IPC_CREAT | IPC_EXCL | 0664 );
       printf("Semaphore Created [%d]\n", semid);
@@ -51,7 +51,7 @@ int main( int argc, char * argv[] ){
       //printf("Change of Shared Mem : [%d]\n", val);
       
      
-    }else if( strcmp( argv[1], "-r" ) == 0 ){
+    }else if( strncmp( argv[1], "-r", strlen(argv[1])) == 0){
 
       semid = semget( key, 1, 0 );
       val = semctl( semid, 0, IPC_RMID );
@@ -68,7 +68,7 @@ int main( int argc, char * argv[] ){
       printf("File Output:\n%s\n", string );
       
       
-    }else if( strcmp( argv[1], "-v" ) == 0){
+    }else if( strncmp( argv[1], "-v", strlen(argv[1])) == 0){
       
       fd = open("file", O_RDONLY, 0664 );
       char string[100000];
